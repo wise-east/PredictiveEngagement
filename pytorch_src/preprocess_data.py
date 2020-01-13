@@ -175,9 +175,9 @@ def split_train_test_valid(data_dir, ifile):
 	'''
 	fr = open(data_dir+ifile, 'r')
 	lines = fr.readlines()
-	fw_train = open(data_dir+ifile+'_train', 'w')
-	fw_test = open(data_dir+ifile+'_test', 'w')
-	fw_valid = open(data_dir+ifile+'_valid', 'w')
+	fw_train = open(data_dir+ifile+'_train.txt', 'w')
+	fw_test = open(data_dir+ifile+'_test.txt', 'w')
+	fw_valid = open(data_dir+ifile+'_valid.txt', 'w')
 	
 	list_convs_label0 = []
 	list_convs_label1 = []
