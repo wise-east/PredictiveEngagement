@@ -8,6 +8,7 @@ import pickle
 import torch.nn as nn
 import os 
 import csv
+import json
 
 random.seed(1000)
 np.random.seed(1000)
@@ -381,7 +382,7 @@ class Engagement_cls():
         model.load_state_dict(torch.load(self.train_dir+'best_model.pt'))
         info = torch.load(self.train_dir + 'best_model.info')
         model.eval()
-        print('begining of test')
+        print('beginning of test')
         for name, param in model.named_parameters():
             if param.requires_grad:
                 print (name, param.data, param.shape)
@@ -446,22 +447,36 @@ class Engagement_cls():
         model.eval()
 
         fw_pred_labels = open(self.data_dir + ofile, 'w')
-        fr_groundtruth_replies = open(self.data_dir + fname_ground_truth, 'r')
-        groundtruth_replies =fr_groundtruth_replies.readlines() 
+        # fr_groundtruth_replies = open(self.data_dir + fname_ground_truth, 'r')
+        # groundtruth_replies =fr_groundtruth_replies.readlines() 
+        results = {
+            'results': []
+        }
 
-        print('begining of prediction')
+        print('beginning of prediction')
         for name, param in model.named_parameters():
             if param.requires_grad:
-                print (name, param.data, param.shape)
+                # print (name, param.data, param.shape)
+                print (name, param.shape)
+
         for stidx in range(0, self.test_size, self.batch_size):
             x_q = self.test_queries[stidx:stidx + self.batch_size]
             x_r = self.test_replies[stidx:stidx + self.batch_size]
-            x_groundtruth_r = groundtruth_replies[stidx:stidx + self.batch_size]
+            # x_groundtruth_r = groundtruth_replies[stidx:stidx + self.batch_size]
             model_output = model(x_q, x_r, self.test_queries_embeds, self.test_replies_embeds)
             pred_eng = torch.nn.functional.softmax(model_output, dim=1)
             for ind in range(len(x_q)):
-                fw_pred_labels.write(x_q[ind]+'==='+x_groundtruth_r[ind].split('\n')[0]+'==='+x_r[ind]+'==='+str(pred_eng[ind][1].item())+'\n')
-            
+                # fw_pred_labels.write(x_q[ind]+'==='+x_groundtruth_r[ind].split('\n')[0]+'==='+x_r[ind]+'==='+str(pred_eng[ind][1].item())+'\n')
+                # fw_pred_labels.write(x_q[ind]+'==='+x_r[ind]+'==='+str(pred_eng[ind][1].item())+'\n')
+                results['results'].append({
+                    'p': x_q[ind], 
+                    'r': x_r[ind], 
+                    'score': round(pred_eng[ind][1].item(), 2)
+                })
+
+        
+        json.dump(results, fw_pred_labels, indent=4)
+        fw_pred_labels.close()
         print('The engagingness score for generated replies has been predicted!')
 
 

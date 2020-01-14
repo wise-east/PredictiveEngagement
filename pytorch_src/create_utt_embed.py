@@ -3,6 +3,7 @@ from bert_serving.client import BertClient
 import csv
 import os
 import pickle
+from tqdm import tqdm 
 
 
 def make_Bert_embeddings(data_dir, fname, f_queries_embed, f_replies_embed, type):
@@ -26,6 +27,8 @@ def make_Bert_embeddings(data_dir, fname, f_queries_embed, f_replies_embed, type
 	for row in csv_reader:
 		queries.append(row[1].split('\n')[0])
 		replies.append(row[2].split('\n')[0])
+
+	print(f"# of queries: {len(queries)}, # of replies: {len(queries)}")
       
 	if os.path.exists(foutput_q) and os.path.exists(foutput_r) :
 		print('Bert embedding files for utterances exist!')
@@ -38,8 +41,8 @@ def make_Bert_embeddings(data_dir, fname, f_queries_embed, f_replies_embed, type
 		bc = BertClient()
 		has_empty = False
 		fwq = open(foutput_q, 'wb')
-		for idx, q in enumerate(queries):
-			print(str(idx)+'query {}'.format(type))
+		for idx, q in tqdm(enumerate(queries)):
+			# print(str(idx)+'query {}'.format(type))
 			if q not in queries_vectors.keys() and q !='':
 				queries_vectors[q] = bc.encode([q])
 			if q not in queries_vectors.keys() and q =='':
@@ -51,8 +54,8 @@ def make_Bert_embeddings(data_dir, fname, f_queries_embed, f_replies_embed, type
 
 		fwr = open(foutput_r, 'wb')
 		has_empty = False
-		for idx, r in enumerate(replies):
-			print(str(idx)+'reply {}'.format(type))
+		for idx, r in tqdm(enumerate(replies)):
+			# print(str(idx)+'reply {}'.format(type))
 			if r not in replies_vectors.keys() and r !='':
 				replies_vectors[r] = bc.encode([r])
 			if r not in replies_vectors.keys() and r =='':
@@ -100,11 +103,13 @@ if __name__ == '__main__':
 	ifname= 'ConvAI_utts'
 	dd_ifname = 'DD_finetune'
 	ofname = ''
-	make_Bert_embeddings(data_dir, ifname+'_train.csv', ifname+'_train_queries_embed_'+pooling, ifname+'_train_replies_embed_'+pooling, 'train')
-	make_Bert_embeddings(data_dir, ifname+'_valid.csv', ifname+'_valid_queries_embed_'+pooling, ifname+'_valid_replies_embed_'+pooling, 'valid')
-	make_Bert_embeddings(data_dir, ifname+'_test.csv', ifname+'_test_queries_embed_'+pooling, ifname+'_test_replies_embed_'+pooling, 'test')
-	make_Bert_embeddings(data_dir, 'humanAMT_engscores_utt.csv', 'humanAMT_queries_embed_'+pooling, 'humanAMT_replies_embed_'+pooling, 'testAMT')
-	make_Bert_embeddings(data_dir, dd_ifname+'_train.csv', dd_ifname+'_queries_train_embed_'+pooling, dd_ifname+'_replies_train_embed_'+pooling, 'train')
-	make_Bert_embeddings(data_dir, dd_ifname+'_valid.csv', dd_ifname+'_queries_valid_embed_'+pooling, dd_ifname+'_replies_valid_embed_'+pooling, 'valid')
-	make_Bert_embeddings(data_dir, 'DD_queries_generated_replies.csv', 'DD_queries_embed_'+pooling, 'DD_generated_replies_embed_'+pooling, 'test')
+	# make_Bert_embeddings(data_dir, ifname+'_train.csv', ifname+'_train_queries_embed_'+pooling, ifname+'_train_replies_embed_'+pooling, 'train')
+	# make_Bert_embeddings(data_dir, ifname+'_valid.csv', ifname+'_valid_queries_embed_'+pooling, ifname+'_valid_replies_embed_'+pooling, 'valid')
+	# make_Bert_embeddings(data_dir, ifname+'_test.csv', ifname+'_test_queries_embed_'+pooling, ifname+'_test_replies_embed_'+pooling, 'test')
+	# make_Bert_embeddings(data_dir, 'humanAMT_engscores_utt.csv', 'humanAMT_queries_embed_'+pooling, 'humanAMT_replies_embed_'+pooling, 'testAMT')
+	# make_Bert_embeddings(data_dir, dd_ifname+'_train.csv', dd_ifname+'_queries_train_embed_'+pooling, dd_ifname+'_replies_train_embed_'+pooling, 'train')
+	# make_Bert_embeddings(data_dir, dd_ifname+'_valid.csv', dd_ifname+'_queries_valid_embed_'+pooling, dd_ifname+'_replies_valid_embed_'+pooling, 'valid')
+	# make_Bert_embeddings(data_dir, 'DD_queries_generated_replies.csv', 'DD_queries_embed_'+pooling, 'DD_generated_replies_embed_'+pooling, 'test')
+	make_Bert_embeddings(data_dir, 'gpt2_dd_scratch_valpred.csv', 'gpt2_queries_dd_scratch_'+pooling, 'gpt2_replies_dd_scratch_'+pooling, 'test')
+
 	

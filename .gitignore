@@ -1,2 +1,6 @@
-data/*
 */__pycache__/*
+*.zip
+*/
+!model/
+!pytorch_src/
+model/log_train.txt

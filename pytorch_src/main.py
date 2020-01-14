@@ -81,15 +81,26 @@ if __name__=="__main__":
 		eng_cls.prepare_data(data_dir, ftrain=ftrain, fvalid=fvalid)
 		eng_cls.train(finetune=True)
 
+	# if args.mode =="predict":
+	# 	#The file including queries and generated replies
+	# 	ftest = 'DD_queries_generated_replies.csv'
+	# 	ftest_queries_embed = 'DD_queries_embed_'+args.pooling
+	# 	ftest_replies_embed = 'DD_generated_replies_embed_'+args.pooling
+	# 	eng_cls = Engagement_cls(train_dir, args.batch_size, args.mlp_hidden_dim, args.epochs, \
+	# 							args.reg, args.lr, args.dropout, args.optimizer,\
+	# 		                    ftest_queries_embed=ftest_queries_embed ,ftest_replies_embed=ftest_replies_embed)
+	# 	eng_cls.prepare_data(data_dir, ftest=ftest)
+	# 	eng_cls.generate_eng_score('DD_replies.txt','DD_queries_genreplies_eng_{}.txt'.format(args.pooling))
+
+	
+
 	if args.mode =="predict":
 		#The file including queries and generated replies
-		ftest = 'DD_queries_generated_replies.csv'
-		ftest_queries_embed = 'DD_queries_embed_'+args.pooling
-		ftest_replies_embed = 'DD_generated_replies_embed_'+args.pooling
+		ftest = 'gpt2_dd_scratch_valpred.csv'
+		ftest_queries_embed = 'gpt2_queries_dd_scratch_'+args.pooling
+		ftest_replies_embed = 'gpt2_replies_dd_scratch_'+args.pooling
 		eng_cls = Engagement_cls(train_dir, args.batch_size, args.mlp_hidden_dim, args.epochs, \
 								args.reg, args.lr, args.dropout, args.optimizer,\
 			                    ftest_queries_embed=ftest_queries_embed ,ftest_replies_embed=ftest_replies_embed)
 		eng_cls.prepare_data(data_dir, ftest=ftest)
-		eng_cls.generate_eng_score('DD_replies.txt','DD_queries_genreplies_eng_{}.txt'.format(args.pooling))
-
-	
+		eng_cls.generate_eng_score('','dd_scratch_{}.json'.format(args.pooling))

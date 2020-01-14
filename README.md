@@ -2,8 +2,12 @@
 
 This repository contains code for [Predictive Engagement](https://arxiv.org/pdf/1911.01456.pdf) paper. If you use it please cite it as: 
 ```
-@inproceedings{Ghazarian2020, title={Predictive Engagement: An Efficient Metric For Automatic Evaluation of
-Open-Domain Dialogue Systems}, author={Sarik Ghazarian, Ralph Weischedel, Aram Galstyan and Nanyun Peng}, year={2020} }
+@inproceedings{
+    Ghazarian2020, 
+    title={Predictive Engagement: An Efficient Metric For Automatic Evaluation of Open-Domain Dialogue Systems}, 
+    author={Sarik Ghazarian, Ralph Weischedel, Aram Galstyan and Nanyun Peng},
+    year={2020} 
+}
 ```
 
 
@@ -38,6 +42,8 @@ The outputs are:
 
 ### Utterance embeddings
 In order to train the engagement classifier or test the trained model, you need to have a set of embeddings files for queries and replies, where each utterance embedding is the mean or max pooling of its words embeddings. In this paper, we have used the Bert contextualized embeddings.
+
+Make sure to download the [BERT-Base, Uncased](https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip) for generating the word embeddings. This is necessary for using the pre-trained engagement classifier. Larger models with different embedding size will return an error.
 
 ```
 python create_utt_embed.py
