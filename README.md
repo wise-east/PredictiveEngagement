@@ -10,9 +10,11 @@ This repository contains code for [Predictive Engagement](https://arxiv.org/pdf/
 }
 ```
 
-
 For any comments/issues/ideas please feel free to contact [me](mailto:sarikgha@usc.edu).
 
+#### TODO
+
+Pipeline for user-friendliness: create CSV, feed CSV to get embeddings, use embeddings to predict scores for generated query/reply pairs. 
 
 ## Steps to setup
 
@@ -21,15 +23,15 @@ Use any virtualenv manager to install all the packages mentioned in the requirem
 
 For example, using Anaconda: 
 ```
-conda create -n predeng python=3.6
-conda activate predeng
-pip install -r requirements.txt
+$ conda create -n predeng python=3.6
+$ conda activate predeng
+$ pip install -r requirements.txt
 ```
 
 
 ### Preprocess dataset
 ```
-python preprocess.py 
+$ python preprocess.py 
 ``` 
 
 Run `preprocess.py` in the `pytorch_src` directory. This script preprocesses the ConvAI dataset (train.json file taken from http://convai.io/2017/data/) to extract the dialogs with at least one turn (query and reply utterances). 
@@ -46,7 +48,7 @@ In order to train the engagement classifier or test the trained model, you need 
 Make sure to download the [BERT-Base, Uncased](https://storage.googleapis.com/bert_models/2018_10_18/uncased_L-12_H-768_A-12.zip) for generating the word embeddings. This is necessary for using the pre-trained engagement classifier. Larger models with different embedding size will return an error.
 
 ```
-python create_utt_embed.py
+$ python create_utt_embed.py
 ```
 
 Run create_utt_embed.py with queries and replies files as input to create their embeddings by using [Han Xiao's](https://github.com/hanxiao) [BertClient and BertServer ](https://github.com/hanxiao/bert-as-service). 
@@ -58,7 +60,7 @@ Model directory includes the engagement classifier trained on ConvAI dataset and
 cd into pytorch_src/ directory and specify the mode and all the parameter values that you need to run. As an example, the command below uses the finetuned model in the model directory to predict engagement scores for queries and replies from test set of Daily Dialog dataset. With pooling argument specify what kind of pooling strategy should be used for sentence embedding.
 
 ```
-python main.py --mode predict --pooling mean 
+$ python main.py --mode predict --pooling mean 
 ```
 
 
